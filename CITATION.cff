@@ -4,21 +4,24 @@ title: "Active Model: a generic agent-discipline framework for cold-start scient
 authors:
   - family-names: "Kovačič"
     given-names: "Matevž"
-date-released: 2026-05-03
+date-released: 2026-05-05
 version: "0.1-preliminary"
 type: software
 repository-code: "https://github.com/matevz-kovacic/active-model"
 abstract: >
   A preliminary 2-day exploration of an "Active Model" agent-discipline
   framework (a generic META_DISCIPLINE.md plus structured .active_model/
-  state files), tested on cold-start optimization on circle packing (n=26,
-  n=32) and Lennard-Jones cluster minimization (LJ-38, LJ-75). Includes
-  ablation against Karpathy autoresearch on n=26.
+  state files), tested on optimization problems including circle packing
+  (n=26, n=32), spherical codes / Tammes problems, and Lennard-Jones cluster
+  minimization (LJ-38, LJ-75). Includes ablation against Karpathy autoresearch
+  on n=26.
 keywords:
   - "AI agents"
   - "cold-start optimization"
   - "scientific discovery"
   - "circle packing"
+  - "spherical codes"
+  - "Tammes problem"
   - "Lennard-Jones cluster"
   - "research methodology"
 license: MIT
