@@ -27,7 +27,11 @@ https://spherical-codes.org/
 ## Candidate Data
 
 - `coords.json`: 86 vectors in `R^6`
+- `report.json`: captured verification output from the experiment run
 
+The captured report records `STATUS: PASS`, worst pair `[12, 32]`, raw norm
+range `[0.9999999999999999, 1.0000000000000002]`, and margin
+`+1.705681792e-6` against the reference value.
 
 ## Method
 
