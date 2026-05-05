@@ -1,0 +1,17 @@
+{
+  "path": "spherical_codes/n6_N86/coords.json",
+  "status": "PASS",
+  "N": 86,
+  "benchmark": 0.548918184883,
+  "max_dot": 0.548916479201208,
+  "min_angle_rad": 0.9897289094001412,
+  "min_angle_deg": 56.70728937071392,
+  "margin": 1.7056817920302336e-06,
+  "min_norm": 0.9999999999999999,
+  "max_norm": 1.0000000000000002,
+  "worst_pair": [
+    12,
+    32
+  ],
+  "error": null
+}
