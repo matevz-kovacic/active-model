@@ -12,7 +12,9 @@ per-result documents with the details and data files.
 | Problem | This repo's result | Reference | Status | Details |
 |---|---:|---:|---|---|
 | **n=26 circle packing in unit square** (maximize sum of radii) | sum r = **2.6359830849175889** | 2.6359830822781625 (Aemon) | new SOTA at floating-point precision | [details](n26_circle_packing/README.md) |
-| **n=32 circle packing in unit square** (maximize sum of radii) | sum r = 2.939572771 | 2.93957 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943)) | matches Jan-2026 SOTA at floored 5-decimal precision | [details](n32_circle_packing/README.md) |
+| **n=32 circle packing in unit square** (maximize sum of radii) | sum r = 2.939572771 | 2.93957 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943)) | matches Jan-2026 SOTA at floored 5-decimal precision | [details](n32_circle_packing/README.md) |                                                                                           
+| **n=26 circle packing in a rectangle (perimeter 4)** (maximize sum of radii) | sum r = **2.6393205704880214** | 2.63930 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943)) | new SOTA at 5-decimal precision (2.63932 vs 2.63930) | [details](n26_circle_packing_rectangle/README.md) |
+| **n=27 circle packing in a rectangle (perimeter 4)** (maximize sum of radii) | sum r = **2.691523369458056** | 2.69015 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943)) | new SOTA (2.69152 vs 2.69015, +1.37e-3) | [details](n27_circle_packing_rectangle/README.md) |
 | **Spherical code / Tammes problem on S^5, N=86** (minimize max pairwise dot) | max dot = **0.548916479201208** | 0.548918184883 (Henry Cohn, [spherical-codes.org](https://spherical-codes.org/), 2026, "needs more optimization") | new best numerical code at verifier precision | [details](spherical_codes/n6_N86/README.md) |
 | **Spherical code / Tammes problem on S^5, N=98** (minimize max pairwise dot) | max dot = **0.571037778803683** | 0.571052839653 (Henry Cohn, [spherical-codes.org](https://spherical-codes.org/), 2026, "needs more optimization") | new best numerical code at verifier precision | [details](spherical_codes/n6_N98/README.md) |
 | **Lennard-Jones 38-atom cluster** (minimum energy) | U = -173.92842659 | -173.928427 (Cambridge canonical, Gomez/Pillardy/Doye) | matches the canonical global minimum | [details](lennard_jones/lj38/README.md) |
@@ -28,6 +30,14 @@ checker:
 
 ```bash
 python n26_circle_packing/verify.py n26_circle_packing/best_26_circles.json
+```
+
+The two rectangle-packing results each ship their own strict verifier; the
+verifier finds the adjacent `solution.json` automatically:
+
+```bash
+python n26_circle_packing_rectangle/verify.py
+python n27_circle_packing_rectangle/verify.py
 ```
 
 The Tammes/spherical-code entry includes the coordinate file and the captured
