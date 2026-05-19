@@ -2,10 +2,67 @@
 
 ![n=26 cold-start result: 26 circles in the unit square, sum of radii = 2.6359830849175889](cover.svg)
 
-Cold-start results from a research-discipline framework applied to hard
-optimization benchmarks. **The framework itself is in the works and not yet
-released.** This repository is organized as a compact result index plus
-per-result documents with the details and data files.
+This repository contains verifier-backed numerical results produced by a cold-start optimization agent.
+
+The system currently appears strongest on continuous, geometric, and lightly constrained black-box optimization problems, including circle packing, rectangle packing, spherical codes / Tammes-type problems, and energy minimization.
+
+This is a public result archive, not the full optimization harness. The private harness is available for serious private benchmark evaluation, collaboration, or licensing discussions under a separate agreement.
+
+## What this is
+
+The commercial hypothesis is simple:
+
+> If a problem has an executable evaluator, compact candidate solutions, and feasibility can be checked or repaired automatically, a cold-start optimizer may be able to find improved incumbents without domain-specific manual tuning.
+
+This repository documents public benchmark results where that process produced new best-known numerical results, matched known reference optima, or failed to reach the best-known result.
+
+## Private benchmark evaluation
+
+I am interested in private executable benchmarks where:
+
+- the problem is continuous, geometric, or lightly constrained,
+- feasible solutions can be represented compactly,
+- an incumbent or baseline solution is available,
+- improvement can be independently verified,
+- the evaluator is deterministic or reasonably stable,
+- the evaluator can be run locally or in a controlled environment.
+
+For private benchmark evaluation or collaboration:
+
+**Matevz Kovacic**  
+Email: **matevz.celje@gmail.com**
+
+A useful private test has the following structure:
+
+1. You provide an executable evaluator and one or more incumbent solutions.
+2. I run the optimizer without access to your proprietary internal methods.
+3. I return candidate solutions, verifier logs, and a short technical report.
+4. If there is a verified improvement, we can discuss paid follow-up, licensing, or collaboration.
+
+The optimization harness itself is private. Public result files, verifier scripts, candidate solutions, and technical reports can be shared where appropriate.
+
+## Current best fit
+
+The current system appears best suited for:
+
+- geometric packing,
+- spherical / Grassmannian code search,
+- continuous nonconvex optimization,
+- energy minimization,
+- lightly constrained black-box search,
+- problems where candidate solutions are compact and cheap to verify.
+
+## Current limitations
+
+This is not a claim of a general-purpose optimizer.
+
+So far, the system has been less successful on:
+
+- routing / placement with many interacting constraints,
+- slow or noisy simulators,
+- problems dominated by feasibility engineering,
+- objectives where the evaluator is hard to reproduce.
+
 
 ## Results
 
@@ -48,9 +105,12 @@ included in this public repository.
 
 ## Framework
 
-The methodology - a generic research-discipline scaffold applied unchanged
-across these problems, the operating rules, and the per-run trace files showing
-what the agent tried - is in the works and will be released separately.
+The public repository is a result and verification archive.
+
+The optimization harness, operating rules, prompts, and full per-run traces are not included in this repository. They are kept separate to preserve the method for private benchmark evaluation, collaboration, or licensing.
+
+For serious technical review, I can provide additional evidence under an appropriate agreement, including selected run logs, verifier outputs, and candidate-generation history.
+
 
 ## License
 
