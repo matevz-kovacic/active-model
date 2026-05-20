@@ -77,6 +77,7 @@ So far, the system has been less successful on:
 | **Spherical code / Tammes problem on S^5, N=98** (minimize max pairwise dot) | max dot = **0.571037778803683** | 0.571052839653 (Henry Cohn, [spherical-codes.org](https://spherical-codes.org/), 2026, "needs more optimization") | new best numerical code at verifier precision | [details](spherical_codes/n6_N98/README.md) |
 | **Lennard-Jones 38-atom cluster** (minimum energy) | U = -173.92842659 | -173.928427 (Cambridge canonical, Gomez/Pillardy/Doye) | matches the canonical global minimum | [details](lennard_jones/lj38/README.md) |
 | **Lennard-Jones 75-atom cluster** (minimum energy) | U = -397.4923309829 | -397.492331 (Marks decahedral global, Doye/Wales/Locatelli) | matches the canonical global minimum | [details](lennard_jones/lj75/README.md) |
+| **Lennard-Jones 104-atom cluster** (minimum energy) | U = -582.0866420676 | -582.086642 (Doye2 C2v Marks-icosahedral global, Doye-Wales 1995) | matches the canonical global minimum | [details](lennard_jones/lj104/README.md) |
 
 ## Verification
 
