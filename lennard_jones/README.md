@@ -13,4 +13,4 @@ Lower energy is better.
 | Instance | This repo's result | Reference | Status | Details |
 |---|---:|---:|---|---|
 | 38 atoms | U = -173.92842659 | -173.928427 (Cambridge canonical, Gomez/Pillardy/Doye) | matches the canonical global minimum | [details](lj38/README.md) |
-| 75 atoms | U = -396.282 | -397.492331 (Marks decahedral global) | local minimum only; does not reach the global | [details](lj75/README.md) |
+| 75 atoms | U = -397.4923309829 | -397.492331 (Marks decahedral global) | matches the canonical global minimum | [details](lj75/README.md) |
