@@ -10,7 +10,7 @@ This is a public result archive, not the full optimization harness. The private 
 
 ## What this is
 
-The commercial hypothesis is simple:
+The hypothesis is simple:
 
 > If a problem has an executable evaluator, compact candidate solutions, and feasibility can be checked or repaired automatically, a cold-start optimizer may be able to find improved incumbents without domain-specific manual tuning.
 
