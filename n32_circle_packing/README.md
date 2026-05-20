@@ -8,7 +8,7 @@ maximizing the sum of radii.
 | Quantity | Value |
 |---|---:|
 | Sum of radii | **2.9395727712007664** |
-| Reference | 2.939572726664292 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943); raw data at [DominikKamp/Packing](https://github.com/DominikKamp/Packing/blob/main/square/n32/circlepacking_n32.tad)) |
+| Reference | 2.939572726664292 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943); raw data at [DominikKamp/Packing](https://github.com/DominikKamp/Packing/blob/main/square/n32/circlepacking_n32.txt)) |
 | Improvement over reference | ≈ 4.45e-8 (new SOTA at floating-point precision) |
 
 ## Independent Verification
