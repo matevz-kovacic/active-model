@@ -14,6 +14,7 @@ This is a public result archive, not the full optimization harness. The private 
 - **Cleanest full-precision paper comparison:** n=32 variable-radius circle packing in the unit square, improving on the Berthold et al. Jan 2026 full-precision reference by about 4.45e-8 and passing the public AlphaEvolve/DeepMind verifier.
 - **External mathematical table improvements:** new best numerical spherical codes for S^5, N=86 and S^5, N=98, referenced from spherical-codes.org.
 - **Lennard-Jones morphology validation:** matched canonical LJ global minima across three distinct structural families — double-funnel fcc LJ38, Marks-decahedral LJ75, and C2v Marks-icosahedral LJ104.
+- **Largest constrained-NLP improvement:** AC OPF on the 13,659-bus European Pegase grid (199,281 vars, 191,097 indefinite QCQP constraints), improving the MINLPLib `p1` primal from 386,108.81 to **386,106.54** in a structurally different generator-dispatch basin at constraint residual 1.79e-12.
 
 ## What this is
 
@@ -32,6 +33,7 @@ The current system appears best suited for:
 - continuous nonconvex optimization,
 - energy minimization,
 - lightly constrained black-box search,
+- large-scale constrained nonlinear and quadratically constrained programs (QCQP / NLP) when an incumbent warm-start and a solver chain (IPOPT / MUMPS / MA57) are available,
 - problems where candidate solutions are compact and cheap to verify.
 
 ## Current limitations
@@ -63,6 +65,20 @@ So far, the system has been less successful on:
 | **Lennard-Jones 38-atom cluster** (minimum energy) | U = -173.92842659 | -173.928427 (Cambridge canonical, Gomez/Pillardy/Doye) | matches the canonical global minimum | [details](lennard_jones/lj38/README.md) |
 | **Lennard-Jones 75-atom cluster** (minimum energy) | U = -397.4923309829 | -397.492331 (Marks decahedral global, Doye/Wales/Locatelli) | matches the canonical global minimum | [details](lennard_jones/lj75/README.md) |
 | **Lennard-Jones 104-atom cluster** (minimum energy) | U = -582.0866420676 | -582.086642 (Doye2 C2v Marks-icosahedral global, Doye-Wales 1995) | matches the canonical global minimum | [details](lennard_jones/lj104/README.md) |
+
+## MINLPLib AC Optimal Power Flow benchmarks
+
+[MINLPLib](https://www.minlplib.org/) is the COIN-OR / GAMS benchmark library
+for mixed-integer nonlinear programs. The two QCQP instances below are
+large-scale AC Optimal Power Flow models on the European Pegase grid, with a
+linear cost objective subject to nonlinear (lifted bilinear) power-flow
+constraints. MINLPLib's published acceptance gate for primal submissions is
+`infeas_max <= 1e-8` against the official `.nl` evaluator.
+
+| Problem | This repo's result | Published primal | Status | Details |
+|---|---:|---:|---|---|                                                                                                                       
+| **acopf_case1354pegase_qcqp** (1354-bus European AC OPF; 19,236 vars, 21,580 constraints; non-convex QCQP) | obj = **74068.79660229431** (infeas 9.9997e-9) | 74069.35457 (infeas 8e-11, [MINLPLib p1](https://www.minlplib.org/acopf_case1354pegase_qcqp.html)) | new best-known primal at the 1e-8 gate via tolerance-budget exploitation (Δ obj ≈ -0.558) — see [details](minlplib/acopf_case1354pegase_qcqp/README.md) | [details](minlplib/acopf_case1354pegase_qcqp/README.md) |                                                                                                                          
+| **acopf_case13659pegase_qcqp** (13,659-bus European AC OPF; 199,281 vars, 191,097 constraints; non-convex QCQP) | obj = **386106.5446322** (infeas 1.79e-12) | 386108.80970 (infeas 1e-10, [MINLPLib p1](https://www.minlplib.org/acopf_case13659pegase_qcqp.html)) | new best-known primal in a different generator-dispatch basin than p1 (Δ obj ≈ -2.265) | [details](minlplib/acopf_case13659pegase_qcqp/README.md) |
 
 
 ## Verification
