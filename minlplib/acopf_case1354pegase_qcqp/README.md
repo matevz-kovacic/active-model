@@ -6,6 +6,28 @@ instance — an AC Optimal Power Flow QCQP for the 1354-bus European Pegase
 electricity grid. Linear cost objective subject to nonlinear (lifted bilinear)
 power-flow constraints and operational bounds.
 
+## Status: declined by MINLPLib (tolerance-budget artifact)
+
+This candidate was submitted to MINLPLib on 2026-05-24 and declined by
+maintainer Stefan Vigerske on 2026-05-25. His reasoning, paraphrased: when a
+local NLP solver is asked to polish the candidate and reduce its constraint
+violations below the published 1e-8 gate, the objective returns to the `p1`
+solution. The 0.558 margin lives entirely in the equality-slack budget the
+published tolerance makes available; it is not a new basin of attraction.
+
+The same point (companion submission, `acopf_case13659pegase_qcqp`) *was*
+accepted as [p2](https://www.minlplib.org/acopf_case13659pegase_qcqp.p2.html)
+on 2026-05-25 — that result's constraint residual is four orders of
+magnitude inside the gate, so its improvement cannot come from tolerance
+slack.
+
+The candidate, the three-channel cross-verification, and the mechanism
+details below are retained as a documented negative result. A
+polish-and-recheck step — a candidate is only submitted if its objective
+improvement survives a local polish to infeas ≤ 1e-10 — has been added to
+the submission pipeline so this failure mode is caught before reaching the
+maintainer.
+
 ## Result
 
 | Quantity | Value |
