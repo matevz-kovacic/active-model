@@ -1,0 +1,20 @@
+{
+  "accepted": true,
+  "valid": true,
+  "score": 68.77498589586094,
+  "error_type": null,
+  "error_message": null,
+  "failing_group": null,
+  "submission_sha256": "ea2e441512e39823018f973b153dfb92d0414320605a8a9e2b685d00f5680724",
+  "metric_sha256": "85649556b1c2c2e78d312ede88d1079bd6f59256493a92a6d0d17f691e227ad8",
+  "shapely_version": "2.1.2",
+  "elapsed_s": 27.833,
+  "per_puzzle_path": ".active_model/trace/data/per_puzzle/final.csv",
+  "strategy": "final_bestof",
+  "target": 68.7812351193,
+  "near_acceptable": false,
+  "slack": -0.006249223439070306,
+  "valid_format": true,
+  "per_puzzle_sum": 68.77498589586094,
+  "per_puzzle_matches_score": true
+}

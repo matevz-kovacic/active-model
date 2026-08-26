@@ -57,6 +57,7 @@ So far, the system has been less successful on:
 | **n=27 circle packing in a rectangle (perimeter 4)** (maximize sum of radii) | sum r = **2.691523369458056** | 2.69015 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943)) | new SOTA (2.69152 vs 2.69015, +1.37e-3) | [details](n27_circle_packing_rectangle/README.md) |
 | **Spherical code / Tammes problem on S^5, N=86** (minimize max pairwise dot) | max dot = **0.548916479201208** | 0.548918184883 (Henry Cohn, [spherical-codes.org](https://spherical-codes.org/), 2026, "needs more optimization") | new best numerical code at verifier precision | [details](spherical_codes/n6_N86/README.md) |
 | **Spherical code / Tammes problem on S^5, N=98** (minimize max pairwise dot) | max dot = **0.571037778803683** | 0.571052839653 (Henry Cohn, [spherical-codes.org](https://spherical-codes.org/), 2026, "needs more optimization") | new best numerical code at verifier precision | [details](spherical_codes/n6_N98/README.md) |
+| **Kaggle Santa 2025 - Christmas Tree Packing** (200 packings of a non-convex 15-gon; minimize `sum_n s_n^2/n`) | S = **68.774985895860** | 68.780634078014 (published 1st-place solution, [Jeroen Cottaar](https://github.com/jcottaar/packing), CC BY-SA 4.0) | warm-start improvement of 0.005648 over the seed, and 0.006249 below the competition's winning score 68.781235119300; verified by Kaggle's scorer as a late submission after the competition closed - not a competitive placing | [details](santa2025_tree_packing/README.md) |
 
 ## Canonical optima matched
 
@@ -146,6 +147,11 @@ Email: **matevz.celje@gmail.com**
 
 MIT - see `LICENSE`. Citation requested as a courtesy (see `CITATION.cff`), not
 as a license condition.
+
+Exception: `santa2025_tree_packing/submission.csv` (and `per_puzzle.csv` /
+`verdict.json`, which are measurements of it) derives from a **CC BY-SA 4.0**
+work by Jeroen Cottaar and is licensed CC BY-SA 4.0 with attribution required -
+see `santa2025_tree_packing/NOTICE`.
 
 ## How to cite
 
