@@ -1,0 +1,7 @@
+# Keep the shipped artifacts byte-exact on every platform, so the sha256
+# recorded in verdict.json (ea2e4415...0724 for submission.csv) stays
+# verifiable after checkout. Line-ending conversion would change the bytes
+# and break the provenance link.
+submission.csv -text
+per_puzzle.csv -text
+verdict.json   -text

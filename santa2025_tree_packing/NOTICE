@@ -1,0 +1,39 @@
+NOTICE — attribution and licensing for this directory
+=====================================================
+
+submission.csv
+--------------
+This file is a DERIVATIVE WORK.
+
+It was produced by re-optimizing the published 1st-place solution of the
+Kaggle competition "Santa 2025 - Christmas Tree Packing":
+
+    Author:  Jeroen Cottaar
+    Source:  https://github.com/jcottaar/packing
+             branch `full`, res/sol_legalized_{1..200}.pickle
+    Licence: Creative Commons Attribution-ShareAlike 4.0 International
+             (CC BY-SA 4.0)  https://creativecommons.org/licenses/by-sa/4.0/
+
+Under the ShareAlike condition, this derived `submission.csv` is likewise
+licensed CC BY-SA 4.0, and attribution to Jeroen Cottaar is required for
+any further use or redistribution.
+
+`per_puzzle.csv` and `verdict.json` are measurements OF that derived
+submission and are distributed under the same terms.
+
+Everything else in this directory
+---------------------------------
+`verify.py`, `README.md`, and the geometry/search code they describe are
+original work and fall under the repository's own licence (MIT, see the
+top-level LICENSE file).
+
+Not included here
+-----------------
+The official Kaggle metric (`METRIC.py`) is competition material and is
+NOT vendored in this repository. `verify.py` takes it as a path argument
+and pins it by sha256:
+
+    85649556b1c2c2e78d312ede88d1079bd6f59256493a92a6d0d17f691e227ad8
+
+The upstream solution artifacts are likewise not mirrored here; they are
+referenced at the URL above.
