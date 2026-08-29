@@ -1,162 +1,103 @@
-# active-model - results
+# Active Model
 
-![n=26 cold-start result: 26 circles in the unit square, sum of radii = 2.6359830849175889](cover.svg)
+**Experimental AI research system for verifier-backed optimization, systems research, and algorithm discovery.**
 
-This repository contains verifier-backed numerical results produced by a cold-start optimization agent.
+Active Model investigates whether a frontier model can operate as an experimental researcher rather than merely as a coding assistant:
 
-The system currently appears strongest on continuous, geometric, and lightly constrained black-box optimization problems, including circle packing, rectangle packing, spherical codes / Tammes-type problems, and energy minimization.
+```text
+objective + evaluator
+        ↓
+reconnaissance → hypotheses → implementation → experiments
+        ↓
+measurement → failure analysis → next hypothesis
+```
 
-This is a public result archive, not the full optimization harness. The private harness is available for serious private benchmark evaluation, collaboration, or licensing discussions under a separate agreement.
+The emphasis is on **externally checkable results**.
 
-## Representative highlights
+## Highlights
 
-- **Largest current packing improvement:** n=27 circle packing in a fixed-perimeter rectangle, improving the Berthold et al. Jan 2026 reference from 2.69015 to 2.691523369458056.
-- **Cleanest full-precision paper comparison:** n=32 variable-radius circle packing in the unit square, improving on the Berthold et al. Jan 2026 full-precision reference by about 4.45e-8 and passing the public AlphaEvolve/DeepMind verifier.
-- **External mathematical table improvements:** new best numerical spherical codes for S^5, N=86 and S^5, N=98, referenced from spherical-codes.org.
-- **Lennard-Jones morphology validation:** matched canonical LJ global minima across three distinct structural families — double-funnel fcc LJ38, Marks-decahedral LJ75, and C2v Marks-icosahedral LJ104.
-- **Largest constrained-NLP improvement:** AC OPF on the 13,659-bus European Pegase grid (199,281 vars, 191,097 indefinite QCQP constraints), improving the MINLPLib `p1` primal from 386,108.81 to **386,106.54** in a structurally different generator-dispatch basin at constraint residual 1.79e-12. [Accepted by MINLPLib as `p2`](https://www.minlplib.org/acopf_case13659pegase_qcqp.p2.html) on 2026-05-25.
+### 🥇 Reached #1 — NVIDIA SOL-ExecBench, B200
 
-## What this is
+**094_time_decay_exponential_stabilization** · **SOL score 0.998564**
 
-The hypothesis is simple:
+[Leaderboard](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/kernel/94/B200)
 
-> If a problem has an executable evaluator, compact candidate solutions, and feasibility can be checked or repaired automatically, a cold-start optimizer may be able to find improved incumbents without domain-specific manual tuning.
+Active Model attacked the benchmark from the public specification, reference implementation and evaluator, and reached approximately **#8** on this kernel before human research steering began.
 
-This repository documents public benchmark results where that process produced new best-known numerical results, matched known reference optima, or failed to reach the best-known result.
+**Autonomy boundary.** Active Model produced every implementation, experiment, measurement and attribution in this campaign. A human research lead set strategy and, in the final optimization rounds, named specific techniques to try (per-thread ownership width, asynchronous shared-memory staging, chunked max-state). The model implemented and adjudicated them against its own measurements — adopting three, refuting four others with identified mechanisms — and independently found both the largest single defect (a compiler-flag regression costing ~1.6× on the hot path) and the profiling result that explained the remaining gap.
 
-## Current best fit
+> **Autonomous search reached ≈#8; model-generated engineering under human research direction reached #1.**
 
-The current system appears best suited for:
+This distinction is intentional: I do not describe the complete run as autonomous.
 
-- geometric packing,
-- spherical / Grassmannian code search,
-- continuous nonconvex optimization,
-- energy minimization,
-- lightly constrained black-box search,
-- large-scale constrained nonlinear and quadratically constrained programs (QCQP / NLP) when an incumbent warm-start and a solver chain (IPOPT / MUMPS / MA57) are available,
-- problems where candidate solutions are compact and cheap to verify.
+[Technical case study](./sol-execbench-094/README.md)
 
-## Current limitations
+### modded-nanogpt — autonomous LLM-training optimization on 8×H100
 
-This is not a claim of a general-purpose optimizer.
+[PR #358](https://github.com/KellerJordan/modded-nanogpt/pull/358) *(open)*
 
-So far, the system has been less successful on:
+For this experiment, Active Model received a **single high-level objective** and conducted the optimization search autonomously. It inspected the existing record implementation, selected optimization targets, implemented the modifications, designed and ran the performance experiments, checked the validation-loss constraint, and prepared the submission.
 
-- routing / placement with many interacting constraints,
-- problems dominated by feasibility engineering,
-- objectives where the evaluator is hard to reproduce.
+Measured improvement: **−0.729 s mean** against the previous Track 1 implementation in paired same-machine measurements on two independent **8×H100** leases — **6.0× and 8.7×** the corresponding A/A noise floors (mean val loss 3.27886, p = 0.0014 over 20 runs).
 
-## New best-known numerical results
+This is currently the clearest experiment in the repository demonstrating the fully autonomous operating mode.
 
-| Problem | This repo's result | Reference | Status | Details |
-|---|---:|---:|---|---|
-| **n=26 circle packing in unit square** (maximize sum of radii) | sum r = **2.6359830849175889** | 2.6359830822781625 (Aemon) | new SOTA at floating-point precision | [details](n26_circle_packing/README.md) |                                                                                                    
-| **n=32 circle packing in unit square** (maximize sum of radii) | sum r = **2.9395727712007664** | 2.939572726664292 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943); raw data at [DominikKamp/Packing](https://github.com/DominikKamp/Packing/blob/main/square/n32/circlepacking_n32.txt)) | new SOTA at floating-point precision (+4.45e-8) | [details](n32_circle_packing/README.md) |                                                                                                                                                                                                            
-| **n=21 circle packing in a rectangle (perimeter 4)** (maximize sum of radii) | sum r = **2.365832375910822** | 2.3658321334167627 (AlphaEvolve, [DeepMind notebook B.13](https://colab.research.google.com/github/google-deepmind/alphaevolve_results/blob/master/mathematical_results.ipynb#scrollTo=VaSmUodSeJ2i)) | new SOTA at floating-point precision (+2.42e-7) | [details](n21_circle_packing_rectangle/README.md) |
-| **n=26 circle packing in a rectangle (perimeter 4)** (maximize sum of radii) | sum r = **2.6393205704880214** | 2.63930 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943)) | new SOTA at 5-decimal precision (2.63932 vs 2.63930) | [details](n26_circle_packing_rectangle/README.md) |
-| **n=27 circle packing in a rectangle (perimeter 4)** (maximize sum of radii) | sum r = **2.691523369458056** | 2.69015 (Berthold et al., Jan 2026, [arXiv:2601.05943](https://arxiv.org/abs/2601.05943)) | new SOTA (2.69152 vs 2.69015, +1.37e-3) | [details](n27_circle_packing_rectangle/README.md) |
-| **Spherical code / Tammes problem on S^5, N=86** (minimize max pairwise dot) | max dot = **0.548916479201208** | 0.548918184883 (Henry Cohn, [spherical-codes.org](https://spherical-codes.org/), 2026, "needs more optimization") | new best numerical code at verifier precision | [details](spherical_codes/n6_N86/README.md) |
-| **Spherical code / Tammes problem on S^5, N=98** (minimize max pairwise dot) | max dot = **0.571037778803683** | 0.571052839653 (Henry Cohn, [spherical-codes.org](https://spherical-codes.org/), 2026, "needs more optimization") | new best numerical code at verifier precision | [details](spherical_codes/n6_N98/README.md) |
-| **Kaggle Santa 2025 - Christmas Tree Packing** (200 packings of a non-convex 15-gon; minimize `sum_n s_n^2/n`) | S = **68.774985895860** | 68.780634078014 (published 1st-place solution, [Jeroen Cottaar](https://github.com/jcottaar/packing), CC BY-SA 4.0) | warm-start improvement of 0.005648 over the seed, and 0.006249 below the competition's winning score 68.781235119300; verified by Kaggle's scorer as a late submission after the competition closed - not a competitive placing | [details](santa2025_tree_packing/README.md) |
+### Production systems optimization
 
-## Canonical optima matched
+* **llama.cpp** — [PR #27478](https://github.com/ggml-org/llama.cpp/pull/27478) *(open)*: "ggml : speed up batch-1 CPU decode, align large allocations". Up to **+15.29%** end-to-end token-generation throughput on Ryzen 7 9700X (attention change alone +10.67%) and **+9.22%** on Neoverse-N1, measured on Qwen3-30B-A3B Q4_K_M at 8192-token context.
+* **zstd** — three optimization PRs on encode/decode hot paths submitted upstream: [#4729](https://github.com/facebook/zstd/pull/4729) · [#4732](https://github.com/facebook/zstd/pull/4732) · [#4733](https://github.com/facebook/zstd/pull/4733). Includes a decompression-hot-loop optimization removing a loop-carried memory dependency, improving decode throughput by **+2.7–3.4%** with GCC and **+5.5–9.3%** with Clang on Zen 5, with the same direction on Intel Raptor Lake.
+* **dav1d** — two AV1 decoder optimizations submitted upstream. [!1967 *refmvs: collapse runs of identical temporal MVs*](https://code.videolan.org/videolan/dav1d/-/merge_requests/1967): 77.5% of scanned temporal cells are bit-identical to their predecessor, so collapsing each run into one weighted call removes 77.5% of `add_temporal_candidate()` invocations (39.6M → 8.9M) — **+0.5–0.8%** decode across x86-64 and AArch64, up to **+2.96%** on high-redundancy content. [!1968 *mc: avg_direct for full-pel compound blocks*](https://code.videolan.org/videolan/dav1d/-/merge_requests/1968): for full-pel compound blocks the two-buffer scratch round trip reduces exactly to `(a + b + 1) >> 1`, eliminating it for 37.6–78.3% of compound plane-predictions — **+0.9–2.8%** depending on how strong the baseline SIMD path is. Both are exact by construction: bit-identical decoded output across 12 streams.
 
-| Problem | This repo's result | Reference | Status | Details |
-|---|---:|---:|---|---|
-| **Lennard-Jones 38-atom cluster** (minimum energy) | U = -173.92842659 | -173.928427 (Cambridge canonical, Gomez/Pillardy/Doye) | matches the canonical global minimum | [details](lennard_jones/lj38/README.md) |
-| **Lennard-Jones 75-atom cluster** (minimum energy) | U = -397.4923309829 | -397.492331 (Marks decahedral global, Doye/Wales/Locatelli) | matches the canonical global minimum | [details](lennard_jones/lj75/README.md) |
-| **Lennard-Jones 104-atom cluster** (minimum energy) | U = -582.0866420676 | -582.086642 (Doye2 C2v Marks-icosahedral global, Doye-Wales 1995) | matches the canonical global minimum | [details](lennard_jones/lj104/README.md) |
+## Two operating modes
 
-## MINLPLib AC Optimal Power Flow benchmarks
+**Autonomous research** — the human supplies the objective, evaluator, constraints, tools and compute; the model chooses what to investigate and performs the technical search. *Example: modded-nanogpt.*
 
-[MINLPLib](https://www.minlplib.org/) is the COIN-OR / GAMS benchmark library
-for mixed-integer nonlinear programs. The QCQP instance below is a
-large-scale AC Optimal Power Flow model on the European Pegase grid, with a
-linear cost objective subject to nonlinear (lifted bilinear) power-flow
-constraints. MINLPLib's published acceptance gate for primal submissions is
-`infeas_max <= 1e-8` against the official `.nl` evaluator.
+**Human-steered research** — the model still generates, implements and adjudicates the concrete solutions, but a human acts as a research lead: redirecting the search, questioning conclusions, and naming areas or techniques worth investigating. *Example: SOL-ExecBench 094 after the autonomous phase.*
 
-| Problem | This repo's result | Published primal | Status | Details |
-|---|---:|---:|---|---|                                                                                                                       
-| **acopf_case13659pegase_qcqp** (13,659-bus European AC OPF; 199,281 vars, 191,097 constraints; non-convex QCQP) | obj = **386106.5446322** (infeas 1.79e-12) | 386108.80970 (infeas 1e-10, [MINLPLib p1](https://www.minlplib.org/acopf_case13659pegase_qcqp.html)) | new SOTA primal — accepted by MINLPLib as [p2](https://www.minlplib.org/acopf_case13659pegase_qcqp.p2.html) on 2026-05-25 (different generator-dispatch basin than p1, Δ obj ≈ -2.265) | [details](minlplib/acopf_case13659pegase_qcqp/README.md) |
-| **acopf_case1354pegase_qcqp** (1354-bus European AC OPF; 19,236 vars, 21,580 constraints; non-convex QCQP) | obj = **74068.79660229431** (infeas 9.9997e-9) | 74069.35457 (infeas 8e-11, [MINLPLib p1](https://www.minlplib.org/acopf_case1354pegase_qcqp.html)) | matches `p1` SOTA — tolerance-budget farming inside the 1e-8 gate (polishes back to `p1`; not added by MINLPLib) | [details](minlplib/acopf_case1354pegase_qcqp/README.md) |
+The repository reports the two separately, because a result obtained with strategic steering demonstrates something different from a fully autonomous one.
+
+## Other verifier-backed results
+
+* [**n=32 circle packing**](./n32_circle_packing) — improved over Google **AlphaEvolve** and Berthold et al. (Jan 2026), verified with AlphaEvolve verifier.
+* [**n=21 rectangle packing**](./n21_circle_packing_rectangle) — improved over Google **AlphaEvolve**, verified with AlphaEvolve verifier.
+* [**n=26**](./n26_circle_packing) · [**n=26 rectangle**](./n26_circle_packing_rectangle) · [**n=27 rectangle**](./n27_circle_packing_rectangle) — further circle-packing results.
+* [**Spherical codes**](./spherical_codes) — new best-known S⁵ configurations for N=86 and N=98, registered with spherical-codes.org.
+* [**Pegase AC-OPF**](./minlplib) — improved primal for the 13,659-bus European grid (386,108.81 → 386,106.54), accepted into MINLPLib.
+* [**Lennard-Jones clusters**](./lennard_jones) — canonical minima matched for LJ38, LJ75 and LJ104.
+* [**Santa 2025 tree packing**](./santa2025_tree_packing) improved on Kaggle [Santa 2025](https://www.kaggle.com/competitions/santa-2025) competition winner.
+
+See the individual result directories for evidence, verification procedures and caveats.
+
+## What these experiments suggest
+
+The common feature of the successful tasks is increasingly clear. It is **not** geometry, CUDA, or any particular optimization algorithm. It is the existence of:
+
+1. a concrete objective;
+2. a reliable evaluator;
+3. an experimental environment;
+4. enough freedom to modify the proposed solution;
+5. a feedback loop fast enough for repeated hypothesis testing.
+
+Under those conditions, frontier models appear capable of substantially more open-ended technical search than one-shot code generation. How far that extends is the research question behind Active Model.
 
 ## Verification
 
-Each result folder contains the candidate data that is available for that
-problem, the relevant reference value, and any result-specific caveats.
+Claims here should be independently checkable through official benchmark leaderboards, upstream tests and CI, externally maintained verifiers, paired performance measurements with measured noise floors, exact-output checking, or independent benchmark maintainers.
 
-For the n=26 circle-packing result, the repository includes a local strict
-checker:
+Failed experiments are useful evidence too. The objective is not to make every run look successful, but to understand which research loops work.
 
-```bash
-python n26_circle_packing/verify.py n26_circle_packing/best_26_circles.json
-```
+## Source and trace policy
 
-The n=32 unit-square result and the three rectangle-packing results each ship
-their own strict verifier; the verifier finds the adjacent `solution.json`
-automatically:
+This repository is primarily a **results and verification archive**. The full Active Model harness, operating rules and complete research traces are not currently public.
 
-```bash
-python n32_circle_packing/verify.py
-python n21_circle_packing_rectangle/verify.py
-python n26_circle_packing_rectangle/verify.py
-python n27_circle_packing_rectangle/verify.py
-```
+For actively competitive benchmarks the winning implementation may be withheld temporarily even when the verified result and methodology are public — the current #1 SOL-ExecBench kernel is not being released while the benchmark remains actively contested. The performance claim does not depend on it: the result is published by NVIDIA's own evaluator and leaderboard.
 
-The spherical-code entries (S^5, N=86 and N=98) include the coordinate files
-and the captured verification report from the experiment run. The codes
-themselves were verified by Henry Cohn: submissions to
-[spherical-codes.org](https://spherical-codes.org/) are rejected if they
-fail his correctness checks, so listing there is itself an external
-verification step. No separate Tammes verifier is currently included in
-this repository.
+Selected implementation details can be shared privately for serious technical review, research collaboration, or employment discussions.
 
-## Framework
+## Research interests
 
-The public repository is a result and verification archive.
+autonomous research agents · AI for systems · model self-improvement through experimental feedback · GPU and CPU performance engineering · LLM training and inference optimization · algorithm discovery · verifier-guided mathematical and computational search
 
-The optimization harness, operating rules, prompts, and full per-run traces are not included in this repository. They are kept separate to preserve the method for private benchmark evaluation, collaboration, or licensing.
+## Contact
 
-For serious technical review, I can provide additional evidence under an appropriate agreement, including selected run logs, verifier outputs, and candidate-generation history.
-
-## Private benchmark evaluation
-
-I am interested in private executable benchmarks where:
-
-- the problem is continuous, geometric, or lightly constrained,
-- feasible solutions can be represented compactly,
-- an incumbent or baseline solution is available,
-- improvement can be independently verified,
-- the evaluator is deterministic or reasonably stable,
-- the evaluator can be run locally or in a controlled environment.
-
-A useful private test has the following structure:
-
-1. You provide an executable evaluator and one or more incumbent solutions.
-2. I run the optimizer without access to your proprietary internal methods.
-3. I return candidate solutions, verifier logs, and a short technical report.
-4. If there is a verified improvement, we can discuss paid follow-up, licensing, or collaboration.
-
-The optimization harness itself is private. Public result files, verifier scripts, candidate solutions, and technical reports can be shared where appropriate.
-
-Contact: **Matevz Kovacic**  
-Email: **matevz.celje@gmail.com**
-
-## License
-
-MIT - see `LICENSE`. Citation requested as a courtesy (see `CITATION.cff`), not
-as a license condition.
-
-Exception: `santa2025_tree_packing/submission.csv` (and `per_puzzle.csv` /
-`verdict.json`, which are measurements of it) derives from a **CC BY-SA 4.0**
-work by Jeroen Cottaar and is licensed CC BY-SA 4.0 with attribution required -
-see `santa2025_tree_packing/NOTICE`.
-
-## How to cite
-
-```text
-Kovacic, M. (2026). Active Model: cold-start results on circle packing,
-spherical codes, and Lennard-Jones cluster minimization.
-https://github.com/matevz-kovacic/active-model
-```
+Matevž Kovačič — [matevz.celje@gmail.com](mailto:matevz.celje@gmail.com)
