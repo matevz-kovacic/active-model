@@ -17,7 +17,7 @@
 
 Most published work on AI-generated kernels trains or scaffolds specifically for the task — fine-tuned kernel models, RL-trained kernel agents, kernel-specific search harnesses. That leaves a narrower question open: what happens when a **general-purpose** research harness, built for unrelated optimization problems and never designed for GPUs, is pointed at a kernel benchmark cold?
 
-Active Model is that harness. I had never written a GPU kernel. This is one data point on what it did over a weekend — including where it stopped on its own, and what it took to get past that.
+Active Model is that harness. I had never written a GPU kernel. This is one data point on what it did over a weekend — including how far it got unaided, and what changed when I began steering.
 
 The model was not asked to generate CUDA once. It conducted an iterative optimization campaign: reproducing prior work, diagnosing unexplained performance gaps, generating alternative mathematical formulations, designing new kernel architectures, running controlled experiments, analyzing performance workload by workload, abandoning attractive ideas when measurements rejected them, and combining independently successful ideas — until an external evaluator placed the result at the top of the leaderboard. The sections below are the record of that, refutations included.
 
@@ -37,7 +37,7 @@ The boundary is worth stating precisely. I chose the target kernel — from a "f
 
 After the first measured round I began acting as a research lead. My interventions ranged from strategy — *"analyze which workloads are actually losing"*, *"don't assume another parameter sweep is the answer"*, *"investigate why this supposedly fast implementation is unexpectedly slow"* — to naming specific techniques worth testing.
 
-I made **13 technique-level proposals. The model adopted 3 and refuted 10**, each with a mechanism identified. Adopted: per-thread ownership width for the high-batch workloads, asynchronous shared-memory staging, and moving max-state computation off the per-token dependency chain.
+I made **13 technique-level proposals. The model adopted 3 and refuted 10**, each with a mechanism identified. Adopted: a wider per-thread ownership width for the high-batch workloads, asynchronous shared-memory staging, and moving max-state computation off the per-token dependency chain.
 
 What the model owned throughout: deciding *how* to implement each idea, designing the experiments, measuring, attributing results per workload, and — repeatedly — **rejecting suggestions that its measurements refuted**.
 
@@ -59,9 +59,9 @@ Refutations mattered as much as wins, because each one redirected the search. Fi
 
 | idea | runtime change | mechanism identified |
 |---|---|---|
-| shared-memory tiling at high batch | **+199%** | 8-channel blocks issue 32-byte memory requests where the hardware wants 128 |
+| shared-memory tiling at high batch (it was adopted at low batch) | **+199%** | 8-channel blocks issue 32-byte memory requests where the hardware wants 128 |
 | O(C²) → O(C) prefix restructure | **+44%** | the "redundant" work was L2-resident arithmetic hidden under memory latency; the fix added a launch and a global round-trip |
-| finer per-thread ownership | **+11–16%** | same bytes in flight at double the load-instruction count |
+| finer per-thread ownership than the width ultimately adopted | **+11–16%** | same bytes in flight at double the load-instruction count |
 | streaming cache hints | **+10–25%** | L1 caching was doing real work on those streams |
 | custom exponential (SFU bypass) | *not built* | profiler showed compute pipelines 65% idle — the SFU was never the limiter |
 
