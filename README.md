@@ -22,13 +22,14 @@ The emphasis is on **externally checkable results**.
 
 [Leaderboard](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/kernel/94/B200)
 
-Active Model attacked the benchmark from the public specification, reference implementation and evaluator, and reached approximately **#8** on this kernel before human research steering began.
+Active Model attacked the benchmark from the public specification, reference implementation and evaluator, and reached a locally measured **0.997900** on this kernel — ≈**#8** on the board at the time — in its first 4 hours, before human research steering began.
 
-**Autonomy boundary.** Active Model produced every implementation, experiment, measurement and attribution in this campaign. A human research lead set strategy and, in the final optimization rounds, named specific techniques to try (per-thread ownership width, asynchronous shared-memory staging, chunked max-state). The model implemented and adjudicated them against its own measurements — adopting three, refuting four others with identified mechanisms — and independently found both the largest single defect (a compiler-flag regression costing ~1.6× on the hot path) and the profiling result that explained the remaining gap.
+**Autonomy boundary.** Active Model produced every implementation, experiment, measurement and attribution in this campaign. 
+A human research lead set strategy and, in the final optimization rounds, named specific techniques to try (per-thread ownership width, asynchronous shared-memory staging, chunked max-state). The model implemented and adjudicated 13 such proposals against its own measurements — adopting 3 and refuting 10 with identified mechanisms — and independently found the largest single defect of the campaign: a compiler-flag regression costing ~1.6× on the hot path.
 
-> **Autonomous search reached ≈#8; model-generated engineering under human research direction reached #1.**
+> **The first 4 autonomous hours reached a locally measured 0.997900 — ≈#8 on the board at the time. Model-generated engineering under human research direction reached #1.**
 
-This distinction is intentional: I do not describe the complete run as autonomous.
+This distinction is intentional: I do not describe the complete run as autonomous. Nor was the autonomous phase exhausted — it had already diagnosed the compiler-flag defect on its own and had 4 further candidates queued when steering began. Whether it would have reached #1 unaided is untested.
 
 [Technical case study](./sol-execbench-094/README.md)
 
@@ -58,13 +59,13 @@ The repository reports the two separately, because a result obtained with strate
 
 ## Other verifier-backed results
 
-* [**n=32 circle packing**](./n32_circle_packing) — improved over Google **AlphaEvolve** and Berthold et al. (Jan 2026), verified with AlphaEvolve verifier.
-* [**n=21 rectangle packing**](./n21_circle_packing_rectangle) — improved over Google **AlphaEvolve**, verified with AlphaEvolve verifier.
+* [**n=32 circle packing**](./n32_circle_packing) — improved by 4.45e-8 over Berthold et al. (Jan 2026), verified with the published verifier.
+* [**n=21 rectangle packing**](./n21_circle_packing_rectangle) — validated against the published **AlphaEvolve** result.
 * [**n=26**](./n26_circle_packing) · [**n=26 rectangle**](./n26_circle_packing_rectangle) · [**n=27 rectangle**](./n27_circle_packing_rectangle) — further circle-packing results.
 * [**Spherical codes**](./spherical_codes) — new best-known S⁵ configurations for N=86 and N=98, registered with spherical-codes.org.
 * [**Pegase AC-OPF**](./minlplib) — improved primal for the 13,659-bus European grid (386,108.81 → 386,106.54), accepted into MINLPLib.
 * [**Lennard-Jones clusters**](./lennard_jones) — canonical minima matched for LJ38, LJ75 and LJ104.
-* [**Santa 2025 tree packing**](./santa2025_tree_packing) improved on Kaggle [Santa 2025](https://www.kaggle.com/competitions/santa-2025) competition winner.
+* [**Santa 2025 tree packing**](./santa2025_tree_packing).
 
 See the individual result directories for evidence, verification procedures and caveats.
 
