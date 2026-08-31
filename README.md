@@ -24,8 +24,7 @@ The emphasis is on **externally checkable results**.
 
 Active Model attacked the benchmark from the public specification, reference implementation and evaluator, and reached a locally measured **0.997900** on this kernel — ≈**#8** on the board at the time — in its first 4 hours, before human research steering began.
 
-**Autonomy boundary.** Active Model produced every implementation, experiment, measurement and attribution in this campaign. 
-A human research lead set strategy and, in the final optimization rounds, named specific techniques to try (per-thread ownership width, asynchronous shared-memory staging, chunked max-state). The model implemented and adjudicated 13 such proposals against its own measurements — adopting 3 and refuting 10 with identified mechanisms — and independently found the largest single defect of the campaign: a compiler-flag regression costing ~1.6× on the hot path.
+**Autonomy boundary.** Active Model produced every implementation, experiment, measurement and attribution in this campaign. A human research lead set strategy and, after the first measured round, named specific techniques to try (per-thread ownership width, asynchronous shared-memory staging, chunked max-state). The model implemented and adjudicated 13 such proposals against its own measurements — adopting 3 and refuting 10 with identified mechanisms — and independently found the largest single defect of the campaign: a compiler-flag regression costing ~1.6× on the hot path.
 
 > **The first 4 autonomous hours reached a locally measured 0.997900 — ≈#8 on the board at the time. Model-generated engineering under human research direction reached #1.**
 
