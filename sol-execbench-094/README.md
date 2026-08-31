@@ -43,7 +43,7 @@ What the model owned throughout: deciding *how* to implement each idea, designin
 
 Steered phase: **~16 hours · 41 variants measured · 13 proposals**.
 
-> **Active Model autonomously reached ≈#8. With research-lead steering, it generated the technical work that reached #1.**
+> **The first 4 autonomous hours reached a locally measured ≈#8. Model-generated engineering under human research direction reached #1.**
 
 ## What the model found on its own
 
