@@ -16,7 +16,7 @@ The emphasis is on **externally checkable results**.
 
 ## Highlights
 
-### 🥇 Reached #1 — NVIDIA SOL-ExecBench, B200
+### 🥇 Reached #1 — NVIDIA SOL-ExecBench kernel 094, B200
 
 **094_time_decay_exponential_stabilization** · **SOL score 0.998564**
 
@@ -24,7 +24,7 @@ The emphasis is on **externally checkable results**.
 
 Active Model attacked the benchmark from the public specification, reference implementation and evaluator, and reached a locally measured **0.997900** on this kernel — ≈**#8** on the board at the time — in its first 4 hours, before human research steering began.
 
-**Autonomy boundary.** Active Model produced every implementation, experiment, measurement and attribution in this campaign. A human research lead set strategy and, after the first measured round, named specific techniques to try (per-thread ownership width, asynchronous shared-memory staging, chunked max-state). The model implemented and adjudicated 13 such proposals against its own measurements — adopting 3 and refuting 10 with identified mechanisms — and independently found the largest single defect of the campaign: a compiler-flag regression costing ~1.6× on the hot path.
+**Autonomy boundary.** Active Model produced every implementation, experiment, measurement and attribution in this campaign. A human research lead set strategy and, after the first measured round, named specific techniques to try (wider per-thread ownership, asynchronous shared-memory staging, moving max-state off the dependency chain). The model implemented and adjudicated 13 such proposals against its own measurements — adopting 3 and refuting 10 with identified mechanisms — and independently found the largest single defect of the campaign: a compiler-flag regression costing ~1.6× on the hot path.
 
 > **The first 4 autonomous hours reached a locally measured 0.997900 — ≈#8 on the board at the time. Model-generated engineering under human research direction reached #1.**
 
@@ -92,7 +92,7 @@ This repository is primarily a **results and verification archive**. The full Ac
 
 For actively competitive benchmarks the winning implementation may be withheld temporarily even when the verified result and methodology are public — the current #1 SOL-ExecBench kernel is not being released while the benchmark remains actively contested. The performance claim does not depend on it: the result is published by NVIDIA's own evaluator and leaderboard.
 
-Selected implementation details can be shared privately for serious technical review, research collaboration, or employment discussions.
+Selected implementation details can be shared privately for serious technical review or research collaboration.
 
 ## Research interests
 
