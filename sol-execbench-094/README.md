@@ -1,4 +1,4 @@
-# From autonomous ≈#8 to #1 on SOL-ExecBench kernel 094
+# From a locally measured ≈#8 to a verified #1 — SOL-ExecBench kernel 094
 
 ## Active Model on NVIDIA B200
 
@@ -59,7 +59,7 @@ Refutations mattered as much as wins, because each one redirected the search. Fi
 
 | idea | runtime change | mechanism identified |
 |---|---|---|
-| shared-memory tiling at high batch (it was adopted at low batch) | **+199%** | 8-channel blocks issue 32-byte memory requests where the hardware wants 128 |
+| shared-memory tiling at high batch — the same tiling wins at low batch | **+199%** | 8-channel blocks issue 32-byte memory requests where the hardware wants 128 |
 | O(C²) → O(C) prefix restructure | **+44%** | the "redundant" work was L2-resident arithmetic hidden under memory latency; the fix added a launch and a global round-trip |
 | finer per-thread ownership than the width ultimately adopted | **+11–16%** | same bytes in flight at double the load-instruction count |
 | streaming cache hints | **+10–25%** | L1 caching was doing real work on those streams |
