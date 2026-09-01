@@ -18,7 +18,7 @@ The emphasis is on **externally checkable results**.
 
 ### 🥇 Reached #1 — NVIDIA SOL-ExecBench kernel 094, B200
 
-**094_time_decay_exponential_stabilization** · **SOL score 0.998564**
+**094_time_decay_exponential_stabilization** · **SOL score 0.998647**
 
 [Leaderboard](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/kernel/94/B200)
 
@@ -29,6 +29,8 @@ Active Model attacked the benchmark from the public specification, reference imp
 > **The first 4 autonomous hours reached a locally measured 0.997900 — ≈#8 on the board at the time. Model-generated engineering under human research direction reached #1.**
 
 This distinction is intentional: I do not describe the complete run as autonomous. Nor was the autonomous phase exhausted — it had already diagnosed the compiler-flag defect on its own and had 4 further candidates queued when steering began. Whether it would have reached #1 unaided is untested.
+
+A later round, three days on, raised the score to **0.998647** and the margin over the previous leader from +0.000071 to **+0.000154**. Its candidates were generated and screened for register pressure and spills on a machine with **no GPU**, so a single 17-minute rental was enough to measure them. That round involved no technique-level human input.
 
 [Technical case study](./sol-execbench-094/README.md)
 
