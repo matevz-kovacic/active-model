@@ -5,10 +5,10 @@
 **Benchmark:** NVIDIA SOL-ExecBench · scores kernels against hardware speed-of-light limits rather than a framework baseline; NVIDIA runs the evaluator
 **Kernel:** `094_time_decay_exponential_stabilization`
 **Hardware:** NVIDIA B200
-**SOL score:** **0.998564** · **16/16 workloads correct**
+**SOL score:** **0.998647** · **16/16 workloads correct**
 **Result:** **#1**
-**Campaign duration:** ~20 hours over one weekend — 4 h autonomous, ~16 h under research direction
-**Implementations evaluated:** 44 distinct configurations on B200 — 3 in the autonomous phase, 41 under steering
+**Campaign duration:** ~20 hours over one weekend — 4 h autonomous, ~16 h under research direction; plus a later round three days on (see postscript)
+**Implementations evaluated:** 50 distinct configurations on B200 — 3 in the autonomous phase, 41 under steering, 6 in the later round
 **Prior GPU-kernel experience:** none
 
 [Public leaderboard](https://research.nvidia.com/benchmarks/sol-execbench/leaderboard/kernel/94/B200) · [Kernel](https://research.nvidia.com/benchmarks/sol-execbench/kernel/94)
@@ -79,7 +79,7 @@ One finding is worth stating explicitly: the official evaluator's run-to-run var
 
 This is also why the campaign did not stop when it first took the lead. **#1 was reached 3.4 hours into the steered phase; the remaining ~13 hours produced no change in rank.** They raised the margin over the previous leader from +0.000013 to +0.000071 — converting a result inside evaluator noise into one comfortably outside it.
 
-The **0.998564** figure is not self-reported. It is the score **measured** and shown by **NVIDIA's SOL-ExecBench** leaderboard.
+The **0.998647** figure is not self-reported. It is the score **measured** and shown by **NVIDIA's SOL-ExecBench** leaderboard.
 
 ## Outcome
 
@@ -97,7 +97,25 @@ B200 experiments and per-workload attribution  (41 variants, ~16 h)
 workload-specialized solution
         |
 NVIDIA evaluation                        ->  #1, SOL 0.998564
+        |
+later round: offline SASS audit, no GPU        (6 variants, 1 rental)
+        |
+NVIDIA evaluation                        ->  #1, SOL 0.998647
 ```
+
+## Postscript — a later round, after the campaign was called finished
+
+The campaign's own records closed this kernel with the verdict that its idea space was exhausted. That verdict rested on hardware profiles taken on the three **largest-batch** routes; five mid-batch routes had never been profiled at all, and every remediation attempt had been aimed at the tier with the least headroom left.
+
+Asked what could be learned **without renting a GPU**, the model re-derived where the score was actually sensitive and found the unprofiled tier running at roughly a third of the memory bandwidth the same kernel family reached elsewhere — starved of memory-level parallelism rather than bandwidth-bound. The remedy was to deepen prefetching in the one place where the launch geometry left register capacity unused.
+
+The entire candidate set was generated, compiled for the B200 target, and screened for register pressure, spills and load scheduling **locally, on a machine with no GPU**, using the CUDA toolchain already present in a container. One configuration was eliminated on that evidence before it ever consumed GPU time. A single 17-minute rental measured the rest, against a byte-identical control in the same session.
+
+**0.998564 → 0.998647.** The margin over the previous leader went from +0.000071 to **+0.000154**. Outputs are numerically identical to the previous version — not merely inside tolerance.
+
+Two results are worth reporting against interest. The predicted gain was **2.5× larger** than the measured one: the mechanism was right, the magnitude was not. And a control configuration included specifically to falsify the model's own reasoning did falsify part of it — block count turned out to matter independently of the quantity the model had identified as governing.
+
+Unlike the steered phase, this round involved no technique-level human input. The direction given was to look for opportunities that did not require renting hardware, and later to run the experiment and submit the result.
 
 ## What this does and does not establish
 
