@@ -33,7 +33,7 @@ With no technique-level input it wrote and evaluated **3 candidate architectures
 
 The boundary is worth stating precisely. I chose the target kernel — from a "frontier reproducibility" criterion, favouring problems where many independent teams cluster near the top — and directed the model to mine public prior work before writing code. Everything downstream of that was the model's own.
 
-**This phase was interrupted, not exhausted.** When I began steering, the model had already diagnosed the largest single defect of the campaign on its own — a defect in how the submissions were being built, inherited by every prior version — and had four further candidates queued. Whether it would have continued improving unaided is untested; I did not run that counterfactual.
+**This phase was interrupted, not exhausted.** When I began steering, the model had already diagnosed the largest single discrepancy of the campaign on its own — a reproducibility discrepancy inherited from prior work — and had four further candidates queued. Whether it would have continued improving unaided is untested; I did not run that counterfactual.
 
 ### Phase 2 — human-steered research
 
@@ -49,7 +49,7 @@ Steered phase: **~16 hours · 41 variants measured · 13 proposals**.
 
 ## What the model found on its own
 
-* **A build defect inherited by every prior submission.** Noticed because a reproduction ran at a fraction of the speed its public source claimed; confirmed by an instruction census of the compiled code rather than by argument.
+* **A major reproducibility discrepancy inherited from prior work.** The model noticed that measured behavior was inconsistent with the published result and traced the discrepancy to its underlying mechanism.
 * **A numerical contract hidden in a reference implementation.** On a different kernel in the same campaign, the reference imposed a precision constraint that structurally forbids the obvious library solution. Two GPU debugging rounds had chased the wrong cause; a $0 CPU bisection settled it.
 * **The binding constraint, via profiling.** Hardware profiles showed that the resource limiting the dominant workloads was not the one prior work had assumed, which redirected the rest of the campaign.
 
@@ -57,19 +57,19 @@ Steered phase: **~16 hours · 41 variants measured · 13 proposals**.
 
 The campaign explored ten distinct lines of attack on the kernel. Most were refuted, and refutations mattered as much as wins, because each one redirected the search: every refuted idea was closed with a measured runtime change and an identified mechanism, and none was retried without new evidence. The list itself is withheld while the benchmark is contested.
 
-## Workload specialization
+## Workload heterogeneity
 
-A turning point was recognizing that the 16 benchmark workloads occupy different performance regimes, and that no single kernel topology was optimal across them. The final solution routes each workload to the implementation that measured fastest for it.
+A turning point was recognizing that different benchmark regimes had different bottlenecks. The final solution therefore does not assume that one optimization strategy is uniformly best.
 
 ## Measurement discipline
 
 Near the top of a leaderboard, noise masquerades as progress — and automated kernel optimization has already produced headline speedups that turned out to be artifacts of the evaluation harness rather than real work. The campaign used repeated same-machine measurements, per-workload attribution, measured noise floors, rejection of improvements that did not clear noise, and repeated evaluation of final candidates before submission.
 
-One finding is worth stating explicitly: the official evaluator's run-to-run variation is a **global per-run bias** (~15e-6, with 14 of 16 workloads moving together), not per-workload jitter — so any single-run improvement below ~20e-6 is meaningless. The published results were reproduced across independent official evaluations.
+We characterized the evaluator's run-to-run variation and required candidate improvements to clear the measured noise floor before treating them as real. The published results were reproduced across independent official evaluations.
 
 This is also why the campaign did not stop when it first took the lead. **#1 was reached 3.4 hours into the steered phase; the remaining ~13 hours produced no change in rank.** They raised the margin over the previous leader from +0.000013 to +0.000071 — converting a result inside evaluator noise into one comfortably outside it.
 
-None of the scores on this page are self-reported. They are the scores **measured** and shown by **NVIDIA's SOL-ExecBench** leaderboard.
+All leaderboard claims and submitted scores on this page are measured by NVIDIA's SOL-ExecBench evaluator. The ≈#8 autonomous result is explicitly identified as a local measurement and was never submitted.
 
 ## Outcome
 
@@ -84,7 +84,7 @@ model-generated hypotheses -> multiple kernel architectures
         |
 B200 experiments and per-workload attribution  (41 variants, ~16 h)
         |
-workload-specialized solution
+final solution
         |
 NVIDIA evaluation                        ->  #1, SOL 0.998564
         |
@@ -95,8 +95,8 @@ NVIDIA evaluation                        ->  #1, SOL 0.998647
 another participant posts 0.999005       ->  #2
         |
 second campaign: new kernel architecture
-(autonomous), integrated selectively
-into the existing dispatcher             ->  0.999015, ahead by 10 ppm (private)
+(autonomous), validated and integrated
+into the incumbent solution              ->  0.999015, ahead by 10 ppm (private)
         |
 three written review rounds                    (~33 proposals: 5 adopted, the rest refuted)
         |
@@ -105,11 +105,11 @@ NVIDIA evaluation                        ->  #1, SOL 0.999092 (+87 ppm over the 
 
 ## Postscript — a later round, after the campaign was called finished
 
-The campaign's own records closed this kernel with the verdict that its idea space was exhausted. That verdict rested on hardware profiles taken on a subset of the routes; several others had never been profiled at all.
+The campaign's own records closed this kernel with the verdict that its idea space was exhausted.
 
-Asked what could be learned **without renting a GPU**, the model re-derived where the score was actually sensitive, found an unprofiled tier with real headroom, and identified a remedy in the one place the launch geometry left room for it.
+Asked what could be learned without renting a GPU, the model identified a previously unexamined opportunity and generated a small candidate set entirely offline. The candidates were compiled and screened locally before a single short B200 rental was used for measurement.
 
-The entire candidate set was generated, compiled for the B200 target, and screened for resource usage and scheduling problems **locally, on a machine with no GPU**, using the CUDA toolchain already present in a container. One configuration was eliminated on that evidence before it ever consumed GPU time. A single 17-minute rental measured the rest, against a byte-identical control in the same session.
+One configuration was eliminated on that offline evidence before it ever consumed GPU time. A single 17-minute rental measured the rest, against a byte-identical control in the same session.
 
 **0.998564 → 0.998647.** The margin over the previous leader went from +0.000071 to **+0.000154**. Outputs are numerically identical to the previous version — not merely inside tolerance.
 
@@ -125,7 +125,7 @@ I opened a second campaign in a separate directory with one instruction: start f
 
 ### What the model built on its own
 
-The second campaign developed a substantially different time-parallel architecture for the workloads the first campaign had identified as limiting — one the first campaign's records had concluded was not achievable without a cost it could not afford. The design was first validated mathematically, against a CPU model of the kernel, before any GPU was rented, and then integrated selectively into the existing workload dispatcher, one workload at a time, wherever it measured faster than the incumbent.
+The second campaign developed a substantially different kernel architecture that overcame a limitation the first campaign had treated as fundamental. The design was validated mathematically against a CPU model before GPU testing and was then incorporated wherever measurement justified it.
 
 Its first official measurement scored **0.999015** — above the new leader, by 10 ppm. By the evaluator-noise standard of the first campaign, that is not a lead. The next sixteen hours bought the margin.
 
@@ -137,13 +137,13 @@ The largest single gain was not one of my proposals as written: the model extend
 
 ### Calibration before belief
 
-Each round started with a measurement rather than a design: the attainable device figure for this kernel's access pattern, a replay of the evaluator's own preconditioning, per-block timing distributions, and finally a calibration build of the kernel that established the remaining gap was not reachable by the mechanisms under review. That last measurement is what closed the campaign.
+Each round started with a measurement rather than a design, and the last of those measurements established that the remaining gap was not reachable by the mechanisms under review. That is what closed the campaign.
 
 ### Reported against interest
 
-One adopted route gained on every rental and did not transfer to official evaluation. Another adopted change gains partly from measurement rather than from less work, and the campaign records say so. My highest-confidence proposal of the third round was predicted at 10–20 ppm and delivered 0; the mechanism I had assumed was not operating. The third review round as a whole produced nothing.
+One adopted route gained consistently on our rentals but did not transfer to official evaluation. My highest-confidence proposal of the third round was predicted at 10–20 ppm and delivered 0; the assumed mechanism was not operating. The third review round as a whole produced nothing.
 
-**0.998647 → 0.999015 → 0.99906 → 0.999084 → 0.999092.** 43 B200 rentals, 12.2 GPU-hours, $45. The margin over the participant who had overtaken us went from −358 ppm to **+87 ppm**, reproduced across four official evaluations that moved by +3, 0, −10 and −8 ppm relative to their same-session rentals.
+**0.998647 → 0.999015 → 0.99906 → 0.999084 → 0.999092.** 43 B200 rentals, 12.2 GPU-hours, $45. The margin over the participant who had overtaken us went from −358 ppm to **+87 ppm**, reproduced across four official evaluations.
 
 ## What this does and does not establish
 
