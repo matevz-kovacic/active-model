@@ -36,16 +36,6 @@ A later round, three days on, raised the score to **0.998647** and the margin ov
 
 [Technical case study](./sol-execbench-094/README.md)
 
-### modded-nanogpt — autonomous LLM-training optimization on 8×H100
-
-[PR #358](https://github.com/KellerJordan/modded-nanogpt/pull/358) *(open)*
-
-For this experiment, Active Model received a **single high-level objective** and conducted the optimization search autonomously. It inspected the existing record implementation, selected optimization targets, implemented the modifications, designed and ran the performance experiments, checked the validation-loss constraint, and prepared the submission.
-
-Measured improvement: **−0.729 s mean** against the previous Track 1 implementation in paired same-machine measurements on two independent **8×H100** leases — **6.0× and 8.7×** the corresponding A/A noise floors (mean val loss 3.27886, p = 0.0014 over 20 runs).
-
-This is currently the clearest experiment in the repository demonstrating the fully autonomous operating mode.
-
 ### Production systems optimization
 
 * **llama.cpp** — [PR #27478](https://github.com/ggml-org/llama.cpp/pull/27478) *(open)*: "ggml : speed up batch-1 CPU decode, align large allocations". Up to **+15.29%** end-to-end token-generation throughput on Ryzen 7 9700X (attention change alone +10.67%) and **+9.22%** on Neoverse-N1, measured on Qwen3-30B-A3B Q4_K_M at 8192-token context.
